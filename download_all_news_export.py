@@ -25,11 +25,11 @@ def getPaperInfo(url):
 def getAllNewsExport(paper, all_sub_urls, paper_info):
     # print(paper_info)
     all_articles_details = []
-    print(len(paper.articles))
+    # print(len(paper.articles))
     index = 0
     for article in paper.articles:
-        if index == 10:
-            break
+        # if index == 10:
+        #     break
         try:
             index += 1
             print('Running ', index, ' out of ', len(paper.articles))
@@ -40,7 +40,7 @@ def getAllNewsExport(paper, all_sub_urls, paper_info):
             # nlp to get keywords and summary   
             article.nlp()
 
-            # create a dictionary to store the news data ('images' attribute is in wrong format in the parsing process)
+            # create a dictionary to store the news data ('images' attribute may be in wrong format in the parsing process)
             news = {}
             news['url'] = article.url
             news['title'] = article.title
@@ -73,6 +73,7 @@ def getAllNewsExport(paper, all_sub_urls, paper_info):
     # Close opened file
     fo.close()
 
+### Main Program ###
 # url = "http://edition.cnn.com/"
 url = "http://www.scmp.com/frontpage/hk"
 paper, all_sub_urls, paper_info = getPaperInfo(url)
