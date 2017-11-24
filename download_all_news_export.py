@@ -43,12 +43,21 @@ def getAllNewsExport(paper, all_sub_urls, paper_info):
             # nlp to get keywords and summary   
             article.nlp()
 
-            # Construct JSON format string for news
-            article_news = '{{"url": "{news_url}", "title": "{news_title}", "authors": {news_authors}, "text": "{news_text}", "top_image": "{news_top_image}", "images": "{news_images}", "movies": {news_movies}, "keywords": {news_keywords}, "summary": "{news_summary}"}}'
-            article_news_json = article_news.format(news_url=article.url, news_title=article.title, news_authors=json.dumps(article.authors), news_text=article.text, news_top_image=article.top_image, news_images=json.dumps(article.images), news_movies=json.dumps(article.movies), news_keywords=json.dumps(article.keywords), news_summary=article.summary)
-            # print(article_news_json)
-            all_articles_details.append(article_news_json)
-            # print(all_articles_details)
+            # create a dictionary to store the news data ('images' attribute is in wrong format in the parsing process)
+            news = {}
+            news['url'] = article.url
+            news['title'] = article.title
+            news['authors'] = article.authors
+            news['text'] = article.text
+            news['top_image'] = article.top_image
+            # news['images'] = article.images
+            news['movies'] = article.movies
+            news['keywords'] = article.keywords
+            news['summary'] = article.summary
+            # append the dict object into the list
+            all_articles_details.append(news)
+            # TIPS: use json.dumps(WHOLE_LIST) to change all single quotes of dict to double quotes of JSON format
+            # print(json.dumps(all_articles_details))
         except newspaper.article.ArticleException:
             print('Broken URL at index', index-1, ':', article.url)
     # articles_paper_json = articles_paper.format(paper_article_array=json.dumps(all_articles_details))
@@ -58,8 +67,8 @@ def getAllNewsExport(paper, all_sub_urls, paper_info):
     # print(paper_info_json)
     # paper_info.format(paper_brand=paper.brand, paper_description=paper.description, paper_size=paper.size(), paper_category_urls=all_sub_urls, paper_articles=all_articles_details)
     # paper_info.format(paper_articles=all_articles_details)
-    paper_info_formatted = paper_info.format(paper_brand=paper.brand, paper_description=paper.description, paper_size=paper.size(), paper_category_urls=all_sub_urls, paper_articles=all_articles_details)
-    print(paper_info.format(paper_brand=paper.brand, paper_description=paper.description, paper_size=paper.size(), paper_category_urls=all_sub_urls, paper_articles=all_articles_details))
+    paper_info_formatted = paper_info.format(paper_brand=paper.brand, paper_description=paper.description, paper_size=paper.size(), paper_category_urls=all_sub_urls, paper_articles=json.dumps(all_articles_details))
+    print(paper_info.format(paper_brand=paper.brand, paper_description=paper.description, paper_size=paper.size(), paper_category_urls=all_sub_urls, paper_articles=json.dumps(all_articles_details)))
 
     # print(articles_paper_json)
     # Export to another file with JSON format only
