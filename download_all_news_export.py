@@ -23,10 +23,7 @@ def getPaperInfo(url):
     return paper, all_sub_urls, paper_info
 
 def getAllNewsExport(paper, all_sub_urls, paper_info):
-    print(paper_info)
-    # paper_info_json = json.loads(paper_info)
-    # print(paper_info_json['category_urls'])
-    # articles_paper = {{"articles": {paper_article_array}}}
+    # print(paper_info)
     all_articles_details = []
     print(len(paper.articles))
     index = 0
@@ -50,7 +47,12 @@ def getAllNewsExport(paper, all_sub_urls, paper_info):
             news['authors'] = article.authors
             news['text'] = article.text
             news['top_image'] = article.top_image
-            # news['images'] = article.images
+            # The parsing result of images attribute sometimes is type set not list(array)
+            # By checking the type, convert it to list using list(set) to match the JSON format
+            if type(article.images) is set:
+                news['images'] = list(article.images)
+            else:
+                news['images'] = article.images
             news['movies'] = article.movies
             news['keywords'] = article.keywords
             news['summary'] = article.summary
@@ -60,20 +62,13 @@ def getAllNewsExport(paper, all_sub_urls, paper_info):
             # print(json.dumps(all_articles_details))
         except newspaper.article.ArticleException:
             print('Broken URL at index', index-1, ':', article.url)
-    # articles_paper_json = articles_paper.format(paper_article_array=json.dumps(all_articles_details))
-    # Add new 'articles' field in the JSON
-    # paper_info_json.append(articles_paper_json)
-    # paper_info_json['articles'] = all_articles_details
-    # print(paper_info_json)
-    # paper_info.format(paper_brand=paper.brand, paper_description=paper.description, paper_size=paper.size(), paper_category_urls=all_sub_urls, paper_articles=all_articles_details)
-    # paper_info.format(paper_articles=all_articles_details)
-    paper_info_formatted = paper_info.format(paper_brand=paper.brand, paper_description=paper.description, paper_size=paper.size(), paper_category_urls=all_sub_urls, paper_articles=json.dumps(all_articles_details))
-    print(paper_info.format(paper_brand=paper.brand, paper_description=paper.description, paper_size=paper.size(), paper_category_urls=all_sub_urls, paper_articles=json.dumps(all_articles_details)))
 
-    # print(articles_paper_json)
+    paper_info_formatted = paper_info.format(paper_brand=paper.brand, paper_description=paper.description, paper_size=paper.size(), paper_category_urls=all_sub_urls, paper_articles=json.dumps(all_articles_details))
+    # print(paper_info.format(paper_brand=paper.brand, paper_description=paper.description, paper_size=paper.size(), paper_category_urls=all_sub_urls, paper_articles=json.dumps(all_articles_details)))
+
     # Export to another file with JSON format only
     # Open a file
-    fo = open("single_article.json", "w")
+    fo = open("all_articles.json", "w")
     fo.write(paper_info_formatted)
     # Close opened file
     fo.close()
@@ -82,25 +77,3 @@ def getAllNewsExport(paper, all_sub_urls, paper_info):
 url = "http://www.scmp.com/frontpage/hk"
 paper, all_sub_urls, paper_info = getPaperInfo(url)
 getAllNewsExport(paper, all_sub_urls, paper_info)
-
-# # download the article
-# single_article.download()
-# # parse to get different type of information
-# single_article.parse()
-# # nlp to get keywords and summary   
-# single_article.nlp()
-
-# # Construct JSON format string for news
-# news_in_json = {{"title": "{news_title}", "authors": {news_authors}, "text": "{news_text}", "top_image": "{news_top_image}", "images": "{news_images}", "movies": {news_movies}, "keywords": {news_keywords}, "summary": "{news_summary}"}}
-
-# # Export to another file with text format only
-# # fo_test = open("single_article_content.json", "w")
-# # fo_test.write(single_article.text)
-# # fo_test.close()
-
-# # Export to another file with JSON format only
-# # Open a file
-# fo = open("single_article.json", "w")
-# fo.write(news_in_json.format(news_title=single_article.title, news_authors=single_article.authors, news_text=single_article.text, news_top_image=single_article.top_image, news_images=single_article.images, news_movies=single_article.movies, news_keywords=single_article.keywords, news_summary=single_article.summary))
-# # Close opened file
-# fo.close()
