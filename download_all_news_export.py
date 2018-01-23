@@ -1,5 +1,6 @@
 import newspaper
 import json
+import datetime
 
 # Get all news from a website with crawler
 
@@ -68,13 +69,14 @@ def getAllNewsExport(paper, all_sub_urls, paper_info):
 
     # Export to another file with JSON format only
     # Open a file
-    fo = open("all_articles.json", "w")
+    fo = open("all_articles_" + str(datetime.datetime.now()).replace(" ", "_") + ".json", "w")
     fo.write(paper_info_formatted)
     # Close opened file
     fo.close()
 
 ### Main Program ###
 # url = "http://edition.cnn.com/"
-url = "http://www.scmp.com/frontpage/hk"
+url = "http://www.bbc.com/"
+# url = "http://www.scmp.com/frontpage/hk"
 paper, all_sub_urls, paper_info = getPaperInfo(url)
 getAllNewsExport(paper, all_sub_urls, paper_info)
