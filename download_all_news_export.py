@@ -10,6 +10,7 @@ import six
 import newspaper
 import json
 import datetime
+import time
 
 # Get all news from a website with crawler
 
@@ -45,6 +46,7 @@ def getAllNewsExport(paper, all_sub_urls, paper_info):
             print('Running ', index, ' out of ', len(paper.articles))
             # download the article
             article.download()
+            time.sleep(1)
             # parse to get different type of information
             article.parse()
             # nlp to get keywords and summary   
@@ -74,13 +76,18 @@ def getAllNewsExport(paper, all_sub_urls, paper_info):
 
             # Category Classification using Google Cloud NLP API
             categories = classify(article.text, False)
+            categoriesArr = []
             for category in categories:
-                categories[category.replace("/", "_")] = categories.pop(category)
+                categoriesArr.append(category)
+                # new_category = category.replace("/", "")
+                # categories[new_category.replace(" ", "")] = categories.pop(category)
 
-            news['all_categories'] = categories
+            news['all_categories'] = categoriesArr
             # print("MAIN CATEGORY: ", max(categories, key=categories.get))
             if len(categories) != 0:
                 news['main_category'] = max(categories, key=categories.get)
+            else:
+                news['main_category'] = ""
 
             # append the dict object into the list
             all_articles_details.append(news)
