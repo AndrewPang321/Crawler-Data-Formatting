@@ -3,6 +3,7 @@ import io
 import os
 
 from google.cloud import language
+import google
 import numpy
 import six
 
@@ -87,6 +88,8 @@ def getAllNewsExport(paper, all_sub_urls, paper_info):
             # print(json.dumps(all_articles_details))
         except newspaper.article.ArticleException:
             print('Broken URL at index', index-1, ':', article.url)
+        except google.api_core.exceptions.InvalidArgument:
+            print('Language is not support for Google Cloud ClassifyText')
 
     paper_info_formatted = paper_info.format(paper_brand=paper.brand, paper_description=paper.description, paper_size=paper.size(), paper_category_urls=all_sub_urls, paper_articles=json.dumps(all_articles_details))
     # print(paper_info.format(paper_brand=paper.brand, paper_description=paper.description, paper_size=paper.size(), paper_category_urls=all_sub_urls, paper_articles=json.dumps(all_articles_details)))
