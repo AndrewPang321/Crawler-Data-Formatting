@@ -78,7 +78,8 @@ def getAllNewsExport(paper, all_sub_urls, paper_info):
 
             news['all_categories'] = categories
             # print("MAIN CATEGORY: ", max(categories, key=categories.get))
-            news['main_category'] = max(categories, key=categories.get)
+            if len(categories) != 0:
+                news['main_category'] = max(categories, key=categories.get)
 
             # append the dict object into the list
             all_articles_details.append(news)
