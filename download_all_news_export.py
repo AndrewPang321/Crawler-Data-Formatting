@@ -59,6 +59,7 @@ def getAllNewsExport(paper, all_sub_urls, paper_info):
 
             # create a dictionary to store the news data ('images' attribute may be in wrong format in the parsing process)
             news = {}
+            news['id'] = index
             news['url'] = article.url
             news['title'] = article.title
             news['authors'] = article.authors
