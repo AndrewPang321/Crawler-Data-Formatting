@@ -8,8 +8,7 @@ import http.client
 conn = http.client.HTTPSConnection("api.themoviedb.org")
 
 payload = "{}"
-
-fo = csv.writer(open("all_movies_" + str(datetime.datetime.now()).replace(" ", "_") + ".txt", "a"))
+fo = csv.writer(open("all_movies_" + str(datetime.datetime.now()).replace(" ", "_") + ".txt", "a", encoding="utf-8"))
 
 for i in range(1000):
     ### 20 movies for each page ###
@@ -21,6 +20,8 @@ for i in range(1000):
 
     # write to csv file
     for item in data_json["results"]:
+        if item["id"] == None or item["title"] == None or item["vote_average"] == None or item["poster_path"] == None:
+            break
         fo.writerow([item["id"], item["title"], item["vote_average"], "https://image.tmdb.org/t/p/w500"+item["poster_path"]])
 
     time.sleep(1)
